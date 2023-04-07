@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        * {
+            padding: 0%;
+            margin: 0%;
+            box-sizing: border-box;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+
+        }
+
+        header {
+            width: 100%;
+            height: 60px;
+            border-bottom: 2px solid gray;
+            display: flex;
+            align-items: center;
+        }
+
+        header h1 {
+            width: 100%;
+            text-align: center;
+            color: rgb(13, 13, 63);
+        }
+
+        #add-contact, .contact-list{
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgb(116, 110, 110, 0.4);
+            border-radius: 25px;
+            width: 40%;
+            margin: auto;
+            margin-top: 10px;
+            padding: 20px 0;
+            min-height: 40px;
+        }
+
+        #add-contact input, label{
+            margin: auto;
+            width: 90%;
+            height: 30px;
+        }
+        #add-contact input{
+            margin-bottom: 20px;
+        }
+        input::placeholder{
+            padding: 10px;
+        }
+        #add-contact button{
+            margin: auto;
+            width: 130px;
+            height: 30px;
+            transition: 0.5s;
+            border-radius: 5px;
+        }
+        #add-contact button:hover{
+            background-color: black;
+            color: white;
+        }
+        #srch{
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            margin: auto;
+            justify-content: center;
+        }
+        #srch input{
+            width: 80%;
+            height: 30px;
+        }
+        .contact-item{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            width: 85%;
+            margin: auto;
+            margin-top: 20px;
+            /* text-align: center; */
+        }
+        .contact-item .item{
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+
+        }
+        .contact-item .btn{
+            display: flex;
+            flex-direction: column;
+        }
+        .contact-item .btn a{
+            text-decoration: none;
+            text-align: center;
+            color: black;
+            border: 1px solid black;
+            padding: 2px;
+            margin-bottom: 2px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+        .contact-item .btn a:hover{
+            background-color: rgb(7, 7, 7);
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/_header') %>
+        <form id="add-contact" action="/add" method="post">
+            <label for="name">Name</label>
+            <input type="text" placeholder="Name" id="name" name="name">
+            <label for="phone">Mobile Number</label>
+            <input type="text" required minlength="10" maxlength="10" pattern="[0-9]{1,10}" placeholder="Mobile Number" name="phone" id="phone">
+            <button>ADD CONTACT</button>
+        </form>
+        <section class="contact-list">
+            <form action="/" id="srch" method="get">
+                <input type="text" placeholder="Search" name="search" onkeyup="serachDetails()" id="search">
+                <button>&#128269</button>
+            </form>
+            <% data.forEach((element)=> { %>
+                <div class="contact-item">
+                    <div class="item">
+                        <h4><%- element.name %></h2>
+                        <p><%- element.phone %></p>
+                    </div>
+                    <div class="btn">
+                        <a href="/delete/<%-element.id %>">Delete</a>
+                        <a href="/edit/<%-element.id %>">Edit</a>
+                    </div>
+                </div>
+                <% }) %>
+        </section>
+
+</body>
+<script>
+    let srch = document.getElementById('srch');
+    let serachDetails = () => {
+        console.log("calling");
+        let search = document.getElementById('search');
+        let filter = search.value.toUpperCase();
+        let contactItem = document.querySelectorAll('.contact-item');
+        for (let i = 0; i < contactItem.length; i++) {
+            let h = contactItem[i].getElementsByTagName('h4')[0].textContent;
+            let p = contactItem[i].getElementsByTagName('p')[0].textContent;
+            if (h.toUpperCase().indexOf(filter) > -1 || p.toUpperCase().indexOf(filter) > -1) {
+                contactItem[i].style.display = "";
+            }
+            else {
+                contactItem[i].style.display = "none";
+
+            }
+
+        }
+        // console.log(filter);
+    }
+
+</script>
+
+</html>
